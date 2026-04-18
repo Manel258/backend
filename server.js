@@ -1,7 +1,9 @@
 import express from "express"
 import dotenv from "dotenv"
+import mongoose from "mongoose"
 dotenv.config()
 import jobRouter from "./routes/jobRouter.js"
+import errorHandlerMiddleware from "./middleware/ErrorHandlerMiddleware.js"
 const app = express()
 app.use(express.json())
 app.use("/api/jobs", jobRouter)
@@ -15,12 +17,18 @@ app.use("/api/jobs", jobRouter)
 app.get("/",(req,res)=>{
   res.send("Hello World 1 2 3 4 5 6")
 })
-app.use((err,req,res,next)=>{
-  console.log(err)
-  res.status(500).json({msg:"something went wrong"})
-})
+app.use(errorHandlerMiddleware)
 
 const port=process.env.PORT || 3000
-app.listen(port,()=>{
-  console.log("le serveur écoute sur le port 3000");
+try{
+  await mongoose.connect(process.env.MONGO_URL)
+  console.log("connecté a la base de données")
+  app.listen(port,()=>{
+  console.log(`server is running on port ${port}`);
 })
+}
+catch(error){
+  console.log(error)
+  process.exit(1)
+}
+// c'est la liaison avec la base de données, 1 veut dire fail, 0 veut dire success.
