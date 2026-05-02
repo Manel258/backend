@@ -3,11 +3,12 @@ import dotenv from "dotenv"
 import mongoose from "mongoose"
 dotenv.config()
 import jobRouter from "./routes/jobRouter.js"
+import authRouter from "./routes/authRouter.js"
 import errorHandlerMiddleware from "./middleware/ErrorHandlerMiddleware.js"
 const app = express()
 app.use(express.json())
 app.use("/api/jobs", jobRouter)
-
+app.use("/api/auth", authRouter)
 //* designe tous les chemins
 //app.use("*",(req,res)=>{
 //  res.status(404).json({msg:"not found"})

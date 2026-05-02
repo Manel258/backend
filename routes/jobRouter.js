@@ -1,14 +1,14 @@
 import {Router} from "express"
-
+import { validateJobInput,validateIdParam } from "../middleware/validationMiddleware.js"
 const router= Router()
 
 import { getAllJobs,getJob,createJob,updateJob,deleteJob} from "../controllers/jobController.js"
 
 router.get("/", getAllJobs)
-router.post("/",createJob)
-router.patch("/:id",updateJob)
-router.get("/:id",getJob)
-router.delete("/:id",deleteJob)
+router.post("/",validateJobInput,createJob)
+router.patch("/:id",validateIdParam,validateJobInput,updateJob)
+router.get("/:id",validateIdParam,getJob)
+router.delete("/:id",validateIdParam,deleteJob)
 
 //2eme methode, en une ligne
 //router.route("/").get(getAllJobs).post(createJob)
